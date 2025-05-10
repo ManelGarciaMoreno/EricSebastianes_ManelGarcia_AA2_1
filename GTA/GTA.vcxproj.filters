@@ -24,4 +24,9 @@
       <Filter>Archivos de recursos</Filter>
     </Text>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="GTA.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+  </ItemGroup>
 </Project>
