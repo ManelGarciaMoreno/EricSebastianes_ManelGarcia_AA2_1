@@ -127,13 +127,27 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="GTA.cpp" />
+    <ClCompile Include="GameConfig.cpp" />
+    <ClCompile Include="GameLoop.cpp" />
+    <ClCompile Include="Cell.cpp" />
+    <ClCompile Include="IslandConfig.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Map.cpp" />
+    <ClCompile Include="Pedestrian.cpp" />
+    <ClCompile Include="Player.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="config.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="GTA.h" />
+    <ClInclude Include="Cell.h" />
+    <ClInclude Include="GameConfig.h" />
+    <ClInclude Include="GameLoop.h" />
+    <ClInclude Include="IslandConfig.h" />
+    <ClInclude Include="Map.h" />
+    <ClInclude Include="Pedestrian.h" />
+    <ClInclude Include="Player.h" />
+    <ClInclude Include="Position.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

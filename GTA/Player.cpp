@@ -1,0 +1,114 @@
+#include "Player.h"
+#include "Map.h"
+#include "IslandConfig.h"
+#include <cstdlib>
+
+Player::Player(const Map& map) 
+{
+    position.x = std::max(1, std::min(map.GetWidth() - 2, map.GetWidth() / 2));
+    position.y = std::max(1, std::min(map.GetHeight() - 2, map.GetHeight() / 2));
+
+    currentDirection = Direction::RIGHT;
+}
+
+void Player::Move(Direction direction, Map& map, std::vector<Island>& island)
+{
+    Position newPos = position;
+
+    switch (direction) 
+    {
+    case Direction::UP: 
+        newPos.y--; 
+        break;
+    case Direction::DOWN: 
+        newPos.y++; 
+        break;
+    case Direction::LEFT: 
+        newPos.x--; 
+        break;
+    case Direction::RIGHT: 
+        newPos.x++; 
+        break;
+    }
+
+    if (!map.IsPositionValid(newPos)) 
+    {
+        return;
+    }
+
+    Cell targetCell = map.GetCell(newPos);
+
+    if (targetCell.type == CellType::MONEY) 
+    {
+        money += targetCell.moneyInCell;
+        Cell emptyCell;
+        emptyCell.type = CellType::EMPTY;
+        map.SetCell(newPos, emptyCell);
+    }
+
+    if (targetCell.type == CellType::BRIDGE) 
+    {
+        int islandWidth = map.GetWidth() / 3;
+
+        if (newPos.x == islandWidth && money >= island.at(0).GetMoneyToNext())
+        {
+            money -= island.at(0).GetMoneyToNext();
+        }
+        else if (newPos.x == islandWidth * 2 && money >= island.at(1).GetMoneyToNext())
+        {
+            money -= island.at(1).GetMoneyToNext();
+        }
+        else 
+        {
+            return;
+        }
+    }
+
+    position = newPos;
+}
+
+void Player::Attack(std::vector<Pedestrian>& pedestrians, Map& map, int maxMoney)
+{
+    std::vector<Pedestrian> newPedestrians;
+
+    for (auto it = pedestrians.begin(); it != pedestrians.end();)
+    {
+        if (!it->IsAlive())
+        {
+            ++it;
+            continue;
+        }
+
+        Position pedPos = it->GetPosition();
+
+        if (abs(pedPos.x - position.x) <= 1 && abs(pedPos.y - position.y) <= 1)
+        {
+            it->Kill();
+
+            Cell moneyCell;
+            moneyCell.type = CellType::MONEY;
+            moneyCell.moneyInCell = it->GetMoney();
+
+            map.SetCell(pedPos, moneyCell);
+
+            newPedestrians.push_back(GenerateNewPedestrian(map, maxMoney));
+            it = pedestrians.erase(it); 
+        }
+        else
+        {
+            ++it;
+        }
+    }
+
+    pedestrians.insert(pedestrians.end(), newPedestrians.begin(), newPedestrians.end());
+}
+
+
+Pedestrian Player::GenerateNewPedestrian(const Map& map, int maxMoney) const 
+{
+    Position newPos;
+    newPos.x = rand() % (map.GetWidth() / 3) + 1;
+    newPos.y = rand() % (map.GetHeight() - 2) + 1;
+    bool movesVertically = rand() % 2 == 0;
+    return Pedestrian(newPos, movesVertically, maxMoney);
+}
