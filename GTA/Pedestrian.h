@@ -1,12 +1,19 @@
 #ifndef PEDESTRIAN_H
 #define PEDESTRIAN_H
 
+#include "Player.h"
 #include "Position.h"
 #include "Map.h"
 
-class Pedestrian {
+class Pedestrian 
+{
 public:
-    Pedestrian(const Position& pos, bool movesVertically, int maxMoney);
+    Pedestrian(const Position& pos, bool movesVertically, int maxMoney, int health, int attackPower, bool isAggressive);
+    void GenerateMoney(int maxAmount);
+    void TakeDamage(int damage);
+    void AttackPlayer(Player& player);
+    bool IsAggressive() const { return isAggressive; }
+    int GetHealth() const { return health; }
 
     void Move(const Map& map, const Position& playerPos);
     bool IsAlive() const 
@@ -34,8 +41,8 @@ private:
     int money;
     bool isAlive = true;
     bool movesVertically;
-
-    void GenerateMoney(int maxAmount);
+    int health;
+    int attackPower;
+    bool isAggressive;
 };
-
 #endif

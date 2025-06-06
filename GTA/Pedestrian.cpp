@@ -1,8 +1,11 @@
 #include "Pedestrian.h"
+#include "Player.h"
 #include <cstdlib>
 
-Pedestrian::Pedestrian(const Position& pos, bool movesVertically, int maxMoney) : position(pos), movesVertically(movesVertically) 
+Pedestrian::Pedestrian(const Position& pos, bool movesVertically, int maxMoney, int hp, int atk, bool aggressive)
+    : position(pos), movesVertically(movesVertically), health(hp), attackPower(atk), isAggressive(aggressive)
 {
+    isAlive = true;
     GenerateMoney(maxMoney);
 }
 

@@ -18,7 +18,13 @@ struct GameConfig
     int maxMoneyLosSantos = 0;
     int maxMoneySanFierro = 0;
 
+    int cjHealth = 0;
+    int cjAttackPower = 0;
+
+    int pedestrianHealthLosSantos = 0, pedestrianAttackLosSantos = 0;
+    int pedestrianHealthSanFierro = 0, pedestrianAttackSanFierro = 0;
+    int pedestrianHealthLasVenturas = 0, pedestrianAttackLasVenturas = 0;
+
     bool LoadFromFile(const std::string& filename);
 };
-
 #endif

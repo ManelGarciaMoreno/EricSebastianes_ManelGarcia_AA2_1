@@ -10,27 +10,53 @@ bool GameConfig::LoadFromFile(const std::string& filename)
 
     std::string line;
 
-    // Read map dimensions
+    //dimensiones del mapa
     std::getline(file, line);
     size_t delimiter = line.find(';');
     mapHeight = std::stoi(line.substr(0, delimiter));
     mapWidth = std::stoi(line.substr(delimiter + 1));
 
-    // Read Los Santos config
+    //vida y ataque de CJ
     std::getline(file, line);
     delimiter = line.find(';');
-    pedestriansLosSantos = std::stoi(line.substr(0, delimiter));
-    size_t nextDelimiter = line.find(';', delimiter + 1);
-    moneyToSanFierro = std::stoi(line.substr(delimiter + 1, nextDelimiter - (delimiter + 1)));
-    maxMoneyLosSantos = std::stoi(line.substr(nextDelimiter + 1));
+    cjHealth = std::stoi(line.substr(0, delimiter));
+    cjAttackPower = std::stoi(line.substr(delimiter + 1));
 
-    // Read San Fierro config
+    //dinero necesario para el peaje
     std::getline(file, line);
     delimiter = line.find(';');
-    pedestriansSanFierro = std::stoi(line.substr(0, delimiter));
-    nextDelimiter = line.find(';', delimiter + 1);
-    moneyToLasVenturas = std::stoi(line.substr(delimiter + 1, nextDelimiter - (delimiter + 1)));
-    maxMoneySanFierro = std::stoi(line.substr(nextDelimiter + 1));
+    moneyToSanFierro = std::stoi(line.substr(0, delimiter));
+    moneyToLasVenturas = std::stoi(line.substr(delimiter + 1));
+
+    //Los Santos - peatones, dinero máx, vida, daño
+    std::getline(file, line);
+    size_t pos1 = line.find(';');
+    size_t pos2 = line.find(';', pos1 + 1);
+    size_t pos3 = line.find(';', pos2 + 1);
+    pedestriansLosSantos = std::stoi(line.substr(0, pos1));
+    maxMoneyLosSantos = std::stoi(line.substr(pos1 + 1, pos2 - pos1 - 1));
+    pedestrianHealthLosSantos = std::stoi(line.substr(pos2 + 1, pos3 - pos2 - 1));
+    pedestrianAttackLosSantos = std::stoi(line.substr(pos3 + 1));
+
+    //San Fierro
+    std::getline(file, line);
+    pos1 = line.find(';');
+    pos2 = line.find(';', pos1 + 1);
+    pos3 = line.find(';', pos2 + 1);
+    pedestriansSanFierro = std::stoi(line.substr(0, pos1));
+    maxMoneySanFierro = std::stoi(line.substr(pos1 + 1, pos2 - pos1 - 1));
+    pedestrianHealthSanFierro = std::stoi(line.substr(pos2 + 1, pos3 - pos2 - 1));
+    pedestrianAttackSanFierro = std::stoi(line.substr(pos3 + 1));
+
+    //Las Venturas
+    std::getline(file, line);
+    pos1 = line.find(';');
+    pos2 = line.find(';', pos1 + 1);
+    pos3 = line.find(';', pos2 + 1);
+    pedestriansLasVenturas = std::stoi(line.substr(0, pos1));
+    maxMoneySanFierro = std::stoi(line.substr(pos1 + 1, pos2 - pos1 - 1));
+    pedestrianHealthLasVenturas = std::stoi(line.substr(pos2 + 1, pos3 - pos2 - 1));
+    pedestrianAttackLasVenturas = std::stoi(line.substr(pos3 + 1));
 
     file.close();
     return true;

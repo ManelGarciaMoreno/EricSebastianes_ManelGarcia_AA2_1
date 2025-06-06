@@ -127,6 +127,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Car.cpp" />
     <ClCompile Include="GameConfig.cpp" />
     <ClCompile Include="GameLoop.cpp" />
     <ClCompile Include="Cell.cpp" />
@@ -140,6 +141,7 @@
     <Text Include="config.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Car.h" />
     <ClInclude Include="Cell.h" />
     <ClInclude Include="GameConfig.h" />
     <ClInclude Include="GameLoop.h" />

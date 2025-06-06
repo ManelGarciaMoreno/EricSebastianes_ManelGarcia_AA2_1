@@ -10,6 +10,10 @@
 class Player 
 {
 public:
+    int health;
+    int attackPower;
+    bool isInCar;
+
     enum class Direction { 
         UP, 
         DOWN, 

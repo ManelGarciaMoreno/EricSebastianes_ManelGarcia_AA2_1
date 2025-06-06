@@ -131,17 +131,14 @@ void GameLoop::SpawnPedestrians()
                 pos.y = rand() % (map.GetHeight() - 2) + 1;
 
                 Cell cell = map.GetCell(pos);
-                if (cell.type != CellType::WALL)
-                {
-                    validPosition = true;
+                validPosition = (cell.type != CellType::WALL);
 
-                    for (const auto& ped : allPedestrians)
+                for (const auto& ped : allPedestrians)
+                {
+                    if (ped.GetPosition() == pos)
                     {
-                        if (ped.GetPosition() == pos)
-                        {
-                            validPosition = false;
-                            break;
-                        }
+                        validPosition = false;
+                        break;
                     }
                 }
 
@@ -151,7 +148,17 @@ void GameLoop::SpawnPedestrians()
             if (validPosition)
             {
                 bool movesVertically = rand() % 2 == 0;
-                Pedestrian pedestrian(pos, movesVertically, island.GetMaxMoney());
+                bool isAggressive = rand() % 2 == 0;
+
+                Pedestrian pedestrian(
+                    pos,
+                    movesVertically,
+                    island.GetMaxMoney(),
+                    island.GetPedestrianHealth(),
+                    island.GetPedestrianAttack(),
+                    isAggressive
+                );
+
                 allPedestrians.push_back(pedestrian);
             }
         }
