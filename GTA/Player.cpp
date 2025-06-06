@@ -22,15 +22,19 @@ void Player::Move(Direction direction, Map& map, std::vector<Island>& island)
     {
     case Direction::UP: 
         newPos.y--; 
+		currentDirection = Direction::UP;
         break;
     case Direction::DOWN: 
         newPos.y++; 
+		currentDirection = Direction::DOWN;
         break;
     case Direction::LEFT: 
         newPos.x--; 
+		currentDirection = Direction::LEFT;
         break;
     case Direction::RIGHT: 
         newPos.x++; 
+		currentDirection = Direction::RIGHT;
         break;
     }
 

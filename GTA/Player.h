@@ -42,6 +42,10 @@ public:
     int GetMoney() const
     {
         return money;
+    } 
+    int GetHealth() const
+    {
+        return health;
     }
 
     void AddMoney(int amount)
@@ -63,7 +67,6 @@ private:
     Position position;
     Direction currentDirection;
     int money = 0;
-
 };
 
 #endif

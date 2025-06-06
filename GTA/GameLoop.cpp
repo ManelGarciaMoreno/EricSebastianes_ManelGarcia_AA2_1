@@ -180,6 +180,7 @@ void GameLoop::Render()
         }
 
         std::cout << "Dinero: " << player.GetMoney() << std::endl;
+        std::cout << "Vida: " << player.GetHealth() << "\n";
     }
 }
 
