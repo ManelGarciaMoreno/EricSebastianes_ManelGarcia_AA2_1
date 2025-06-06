@@ -2,12 +2,14 @@
 #include "Pedestrian.h"
 #include "Map.h"
 #include "IslandConfig.h"
+#include "Pedestrian.h"
 #include <cstdlib>
+#include <iostream>
 
-Player::Player(const Map& map) 
+Player::Player(const Map& map, const int& attack, const int& health) : health(health), attackPower(attack), isInCar(false)
 {
-    position.x = std::max(1, std::min(map.GetWidth() - 2, map.GetWidth() / 2));
-    position.y = std::max(1, std::min(map.GetHeight() - 2, map.GetHeight() / 2));
+    position.x = (std::max)(1, (std::min)(map.GetWidth() - 2, map.GetWidth() / 2));
+    position.y = (std::max)(1, (std::min)(map.GetHeight() - 2, map.GetHeight() / 2));
 
     currentDirection = Direction::RIGHT;
 }
@@ -74,27 +76,29 @@ void Player::Attack(std::vector<Pedestrian>& pedestrians, Map& map, int maxMoney
 
     for (auto it = pedestrians.begin(); it != pedestrians.end();)
     {
-        if (!it->IsAlive())
-        {
+        if (!it->IsAlive()) {
             ++it;
             continue;
         }
 
         Position pedPos = it->GetPosition();
+        bool shouldIncrement = true;
 
         if (abs(pedPos.x - position.x) + abs(pedPos.y - position.y) == 1)
         {
             it->TakeDamage(attackPower);
+
             if (!it->IsAlive())
             {
+                // Handle pedestrian death
                 Cell moneyCell;
                 moneyCell.type = CellType::MONEY;
                 moneyCell.moneyInCell = it->GetMoney();
                 map.SetCell(pedPos, moneyCell);
 
-                newPedestrians.push_back(GenerateNewPedestrian(map, maxMoney));
+                newPedestrians.push_back(Pedestrian::GenerateNewPedestrian(map, maxMoney));
                 it = pedestrians.erase(it);
-                continue;
+                shouldIncrement = false;
             }
             else if (it->IsAggressive())
             {
@@ -102,15 +106,14 @@ void Player::Attack(std::vector<Pedestrian>& pedestrians, Map& map, int maxMoney
 
                 if (!this->IsAlive())
                 {
-					system("cls");
-                    std::cout << "CJ ha muerto. Game Over.\n";
-                 /*  Sleep(3000);
-                    exit(0); // Temporal hasta tener GameState::GameOver*/
+                    return;
                 }
             }
         }
 
-        ++it;
+        if (shouldIncrement) {
+            ++it;
+        }
     }
 
     pedestrians.insert(pedestrians.end(), newPedestrians.begin(), newPedestrians.end());

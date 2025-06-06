@@ -7,14 +7,13 @@
 
 class Island 
 {
-    int pedestrianHealth;
-    int pedestrianAttack;
 public:
     Island(int maxPedestrians, int maxMoney, int moneyToNext, int pedHealth, int pedAttack);
 
     void AddPedestrian(const Pedestrian& pedestrian);
     int GetPedestrianHealth() const { return pedestrianHealth; };
     int GetPedestrianAttack() const { return pedestrianAttack; };
+
     const std::vector<Pedestrian>& GetPedestrians() const 
     { 
         return pedestrians; 
@@ -36,6 +35,9 @@ public:
     }
 
 private:
+    int pedestrianHealth;
+    int pedestrianAttack;
+
     std::vector<Pedestrian> pedestrians;
     int maxPedestrians;
     int maxMoney;
