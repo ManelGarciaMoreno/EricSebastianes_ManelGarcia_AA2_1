@@ -4,7 +4,6 @@
 #include "Cell.h"
 #include "Position.h"
 #include "GameConfig.h"
-#include "Player.h"
 #include <vector>
 
 class Map {
@@ -12,7 +11,7 @@ public:
     Map(int width, int height);
 
     void Initialize(const GameConfig& config);
-    bool IsPositionValid(const Position& pos);
+    bool IsPositionValid(const Position& pos) const;
     Cell GetCell(const Position& pos) const;
     void SetCell(const Position& pos, const Cell& cell);
 

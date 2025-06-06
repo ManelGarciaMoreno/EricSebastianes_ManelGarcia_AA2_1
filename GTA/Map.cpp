@@ -27,7 +27,7 @@ void Map::Initialize(const GameConfig& config)
     CreateRiversAndBridges();
 }
 
-bool Map::IsPositionValid(const Position& pos) 
+bool Map::IsPositionValid(const Position& pos) const
 {
     if (pos.x < 0 || pos.x >= width || pos.y < 0 || pos.y >= height) 
     {
