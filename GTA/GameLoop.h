@@ -4,8 +4,11 @@
 #include "Player.h"
 #include "Map.h"
 #include "IslandConfig.h"
+#include "Car.h"
 #include <vector>
 #include <iostream>
+#include <string>
+
 
 class GameLoop
 {
@@ -16,10 +19,12 @@ public:
     GameLoop(const GameConfig& config);
     void Run();
     void ChangeState(int state);
+    std::vector<Car> allCars;
 
     static void ExitGame()
     {
         gameRunning = false;
+
         system("cls");
         std::cout << "Game Over" << std::endl;
     }
@@ -37,6 +42,7 @@ private:
     void Update();
     void Render();
     void SpawnPedestrians();
+    void SpawnCars();
 };
 
 #endif

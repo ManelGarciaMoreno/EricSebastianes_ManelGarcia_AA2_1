@@ -14,7 +14,7 @@ class Player
 public:
     int health;
     int attackPower;
-    bool isInCar;
+    bool isInCar = false;
 
     enum class Direction
     {
@@ -62,6 +62,14 @@ public:
     {
         return health > 0;
     }
+
+    bool IsInCar() const { return isInCar; }
+
+    void EnterCar() { isInCar = true; }
+
+    void ExitCar() { isInCar = false; }
+
+    void SetPosition(const Position& pos) { position = pos; }
 
 private:
     Position position;

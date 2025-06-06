@@ -1,10 +1,15 @@
 #include "GameLoop.h"
 #include "GameConfig.h"
 #include <Windows.h>
+#include <Winuser.h>
 #include <iostream>
 #include <cstdlib>
 
+#define VK_E 0x45
+#define VK_E_MIN 0x65
+
 bool GameLoop::gameRunning = true;
+bool carFound = false;
 
 GameLoop::GameLoop(const GameConfig& config) : map(config.mapWidth, config.mapHeight), player(map, config.cjAttackPower, config.cjHealth)
 {
@@ -65,6 +70,37 @@ void GameLoop::ProcessInput()
 
             player.Attack(allPedestrians, map, maxMoney);
         }
+
+        if ((GetAsyncKeyState(VK_E) || GetAsyncKeyState(VK_E_MIN)))
+        {
+            if (!player.IsInCar())
+            {
+                for (auto& car : allCars)
+                {
+                    if (car.GetPosition() == player.GetPosition() && !car.IsOccupied())
+                    {
+                        player.EnterCar();
+                        car.SetOccupied(true);
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                for (auto& car : allCars)
+                {
+                    if (car.IsOccupied() && car.GetPosition() == player.GetPosition())
+                    {
+                        player.ExitCar();
+                        car.SetOccupied(false);
+                        player.SetPosition(car.GetPosition());
+                        break;
+                    }
+                }
+            }
+
+            Sleep(150);
+        }
     }
 }
 
@@ -83,8 +119,59 @@ void GameLoop::Update()
     }
 }
 
+void GameLoop::SpawnCars()
+{
+    int numCars = 6;
+    allCars.clear();
+
+    for (int i = 0; i < numCars; ++i)
+    {
+        Position pos;
+        bool valid = false;
+        int attempts = 0;
+
+        while (!valid && attempts < 100)
+        {
+            int islandIndex = rand() % 3;
+            int islandWidth = map.GetWidth() / 3;
+            int startX = islandIndex * islandWidth + 1;
+            int endX = (islandIndex + 1) * islandWidth - 2;
+
+            pos.x = rand() % (endX - startX + 1) + startX;
+            pos.y = rand() % (map.GetHeight() - 2) + 1;
+
+            Cell cell = map.GetCell(pos);
+
+            // No colocar coche en casillas ocupadas por algo
+            if (cell.type == CellType::WALL || cell.type == CellType::MONEY)
+            {
+                attempts++;
+                continue;
+            }
+
+            bool conflict = false;
+
+            for (const auto& ped : allPedestrians)
+                if (ped.GetPosition() == pos) conflict = true;
+
+            for (const auto& car : allCars)
+                if (car.GetPosition() == pos) conflict = true;
+
+            if (!conflict) valid = true;
+            attempts++;
+        }
+
+        if (valid)
+        {
+            allCars.emplace_back(pos);
+        }
+    }
+}
+
 void GameLoop::Render()
 {
+    if (!gameRunning) return;
+
     system("cls");
 
     if (gameState == 0) 
@@ -159,20 +246,31 @@ void GameLoop::Render()
                 }
                 else
                 {
-                    bool pedestrianFound = false;
+                    bool drawn = false;
+
                     for (const auto& pedestrian : allPedestrians)
                     {
                         if (pedestrian.GetPosition() == pos && pedestrian.IsAlive())
                         {
                             std::cout << 'p';
-                            pedestrianFound = true;
+                            drawn = true;
                             break;
                         }
                     }
 
-                    if (!pedestrianFound)
+                    if (!drawn)
                     {
-                        std::cout << cell.ToChar();
+                        for (const auto& car : allCars)
+                        {
+                            if (car.GetPosition() == pos)
+                            {
+                                std::cout << 'C';
+                                drawn = true;
+                                break;
+                            }
+                        }
+
+                        std::cout << map.GetCell(pos).ToChar();
                     }
                 }
             }

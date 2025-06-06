@@ -2,7 +2,6 @@
 #include "Pedestrian.h"
 #include "Map.h"
 #include "IslandConfig.h"
-#include "Pedestrian.h"
 #include <cstdlib>
 #include <iostream>
 
@@ -57,6 +56,11 @@ void Player::Move(Direction direction, Map& map, std::vector<Island>& island)
     {
         int islandWidth = map.GetWidth() / 3;
 
+        Cell emptyCell;
+        emptyCell.type = CellType::EMPTY;
+        map.SetCell(newPos, emptyCell);
+
+
         if (newPos.x == islandWidth && money >= island.at(0).GetMoneyToNext())
         {
             money -= island.at(0).GetMoneyToNext();
@@ -67,6 +71,7 @@ void Player::Move(Direction direction, Map& map, std::vector<Island>& island)
         }
         else 
         {
+            health = 0;
             return;
         }
     }
@@ -94,7 +99,6 @@ void Player::Attack(std::vector<Pedestrian>& pedestrians, Map& map, int maxMoney
 
             if (!it->IsAlive())
             {
-                // Handle pedestrian death
                 Cell moneyCell;
                 moneyCell.type = CellType::MONEY;
                 moneyCell.moneyInCell = it->GetMoney();
