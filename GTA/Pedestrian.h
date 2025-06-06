@@ -13,10 +13,6 @@ public:
     Pedestrian(const Position& pos, bool movesVertically, int maxMoney, int health, int attackPower, bool isAggressive);
 
     void GenerateMoney(int maxAmount);
-    void TakeDamage(int damage);
-    bool IsAggressive() const { return isAggressive; }
-    int GetHealth() const { return health; }
-    int GetAttackPower() const { return attackPower; }
 
     static Pedestrian GenerateNewPedestrian(const Map& map, int maxMoney);
 
@@ -24,8 +20,6 @@ public:
 
     void TryAttackPlayer(Player& player);
 
-    // void TakeDamage(int damage);
-    // 
     // void AttackPlayer(Player& player);
 
     bool IsAggressive() const 
@@ -62,7 +56,6 @@ public:
         health -= damage;
         if (health <= 0) isAlive = false;
     }
-    void TryAttackPlayer(Player& player);
 
 private:
     Position position;
