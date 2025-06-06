@@ -1,4 +1,5 @@
 #include "Player.h"
+#include "Pedestrian.h"
 #include "Map.h"
 #include "IslandConfig.h"
 #include <cstdlib>
@@ -81,34 +82,36 @@ void Player::Attack(std::vector<Pedestrian>& pedestrians, Map& map, int maxMoney
 
         Position pedPos = it->GetPosition();
 
-        if (abs(pedPos.x - position.x) <= 1 && abs(pedPos.y - position.y) <= 1)
+        if (abs(pedPos.x - position.x) + abs(pedPos.y - position.y) == 1)
         {
-            it->Kill();
+            it->TakeDamage(attackPower);
+            if (!it->IsAlive())
+            {
+                Cell moneyCell;
+                moneyCell.type = CellType::MONEY;
+                moneyCell.moneyInCell = it->GetMoney();
+                map.SetCell(pedPos, moneyCell);
 
-            Cell moneyCell;
-            moneyCell.type = CellType::MONEY;
-            moneyCell.moneyInCell = it->GetMoney();
+                newPedestrians.push_back(GenerateNewPedestrian(map, maxMoney));
+                it = pedestrians.erase(it);
+                continue;
+            }
+            else if (it->IsAggressive())
+            {
+                this->TakeDamage(it->GetAttackPower());
 
-            map.SetCell(pedPos, moneyCell);
-
-            newPedestrians.push_back(GenerateNewPedestrian(map, maxMoney));
-            it = pedestrians.erase(it); 
+                if (!this->IsAlive())
+                {
+					system("cls");
+                    std::cout << "CJ ha muerto. Game Over.\n";
+                 /*  Sleep(3000);
+                    exit(0); // Temporal hasta tener GameState::GameOver*/
+                }
+            }
         }
-        else
-        {
-            ++it;
-        }
+
+        ++it;
     }
 
     pedestrians.insert(pedestrians.end(), newPedestrians.begin(), newPedestrians.end());
-}
-
-
-Pedestrian Player::GenerateNewPedestrian(const Map& map, int maxMoney) const 
-{
-    Position newPos;
-    newPos.x = rand() % (map.GetWidth() / 3) + 1;
-    newPos.y = rand() % (map.GetHeight() - 2) + 1;
-    bool movesVertically = rand() % 2 == 0;
-    return Pedestrian(newPos, movesVertically, maxMoney);
 }

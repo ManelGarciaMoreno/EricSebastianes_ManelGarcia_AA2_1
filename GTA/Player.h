@@ -6,6 +6,7 @@
 #include "Pedestrian.h"
 #include "IslandConfig.h"
 #include <vector>
+#include <iostream>
 
 class Player 
 {
@@ -46,12 +47,21 @@ public:
         money += amount; 
     }
 
+    void TakeDamage(int dmg)
+    {
+        health -= dmg;
+    }
+    bool IsAlive() const 
+    { 
+        return health > 0;
+    }
+
 private:
     Position position;
     Direction currentDirection;
     int money = 0;
 
-    Pedestrian GenerateNewPedestrian(const Map& map, int maxMoney) const;
+    //Pedestrian GenerateNewPedestrian(const Map& map, int maxMoney) const;
 };
 
 #endif

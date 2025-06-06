@@ -56,10 +56,10 @@ void GameLoop::ProcessInput()
 void GameLoop::Update() 
 {
     allPedestrians.erase(std::remove_if(allPedestrians.begin(), allPedestrians.end(), [](const Pedestrian& p) { return !p.IsAlive(); }), allPedestrians.end());
-    
-    for (auto& pedestrian : allPedestrians) 
+    for (auto& pedestrian : allPedestrians)
     {
         pedestrian.Move(map, player.GetPosition());
+        pedestrian.TryAttackPlayer(player);
     }
 }
 
