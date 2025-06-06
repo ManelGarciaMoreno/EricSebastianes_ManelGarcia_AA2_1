@@ -1,12 +1,14 @@
 #include "Player.h"
 #include "Map.h"
 #include "IslandConfig.h"
+#include "Pedestrian.h"
 #include <cstdlib>
+#include <iostream>
 
-Player::Player(const Map& map) 
+Player::Player(const Map& map, const int& attack, const int& health) : health(health), attackPower(attack), isInCar(false)
 {
-    position.x = std::max(1, std::min(map.GetWidth() - 2, map.GetWidth() / 2));
-    position.y = std::max(1, std::min(map.GetHeight() - 2, map.GetHeight() / 2));
+    position.x = (std::max)(1, (std::min)(map.GetWidth() - 2, map.GetWidth() / 2));
+    position.y = (std::max)(1, (std::min)(map.GetHeight() - 2, map.GetHeight() / 2));
 
     currentDirection = Direction::RIGHT;
 }
@@ -73,42 +75,45 @@ void Player::Attack(std::vector<Pedestrian>& pedestrians, Map& map, int maxMoney
 
     for (auto it = pedestrians.begin(); it != pedestrians.end();)
     {
-        if (!it->IsAlive())
-        {
+        if (!it->IsAlive()) {
             ++it;
             continue;
         }
 
         Position pedPos = it->GetPosition();
+        bool shouldIncrement = true;
 
-        if (abs(pedPos.x - position.x) <= 1 && abs(pedPos.y - position.y) <= 1)
+        if (abs(pedPos.x - position.x) + abs(pedPos.y - position.y) == 1)
         {
-            it->Kill();
+            it->TakeDamage(attackPower);
 
-            Cell moneyCell;
-            moneyCell.type = CellType::MONEY;
-            moneyCell.moneyInCell = it->GetMoney();
+            if (!it->IsAlive())
+            {
+                // Handle pedestrian death
+                Cell moneyCell;
+                moneyCell.type = CellType::MONEY;
+                moneyCell.moneyInCell = it->GetMoney();
+                map.SetCell(pedPos, moneyCell);
 
-            map.SetCell(pedPos, moneyCell);
+                newPedestrians.push_back(Pedestrian::GenerateNewPedestrian(map, maxMoney));
+                it = pedestrians.erase(it);
+                shouldIncrement = false;
+            }
+            else if (it->IsAggressive())
+            {
+                this->TakeDamage(it->GetAttackPower());
 
-            newPedestrians.push_back(GenerateNewPedestrian(map, maxMoney));
-            it = pedestrians.erase(it); 
+                if (!this->IsAlive())
+                {
+                    return;
+                }
+            }
         }
-        else
-        {
+
+        if (shouldIncrement) {
             ++it;
         }
     }
 
     pedestrians.insert(pedestrians.end(), newPedestrians.begin(), newPedestrians.end());
-}
-
-
-Pedestrian Player::GenerateNewPedestrian(const Map& map, int maxMoney) const 
-{
-    Position newPos;
-    newPos.x = rand() % (map.GetWidth() / 3) + 1;
-    newPos.y = rand() % (map.GetHeight() - 2) + 1;
-    bool movesVertically = rand() % 2 == 0;
-    return Pedestrian(newPos, movesVertically, maxMoney);
 }

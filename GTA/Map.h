@@ -6,7 +6,8 @@
 #include "GameConfig.h"
 #include <vector>
 
-class Map {
+class Map 
+{
 public:
     Map(int width, int height);
 
