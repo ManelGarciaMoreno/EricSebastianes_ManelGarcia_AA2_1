@@ -3,10 +3,11 @@
 #define CAR_H
 
 #include "Position.h"
-#include "Player.h"
 
 class Map;
-class Player;
+namespace Player { enum class Direction; }
+
+class Map;
 
 class Car
 {
@@ -14,11 +15,6 @@ class Car
     Position position;
 public:
     Car(const Position& pos);
-
-   /* void MoveUp();
-    void MoveDown();
-    void MoveLeft();
-    void MoveRight();*/
 
     void Move(Player::Direction dir, const Map& map);
 

@@ -5,10 +5,10 @@
 #include "Position.h"
 #include "Map.h"
 #include "Windows.h"
-#include "Player.h"
 #include "Car.h"
+#include "Player.h"
 
-//class Player;
+class Player;
 
 class Pedestrian 
 {

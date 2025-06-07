@@ -15,7 +15,7 @@ Player::Player(const Map& map, const int& attack, const int& health) : health(he
     currentDirection = Direction::RIGHT;
 }
 
-void Player::Move(Direction direction, Map& map, std::vector<Island>& island)
+void Player::Move(Direction direction, Map& map, std::vector<Island>& islands)
 {
     Position newPos = position;
 
@@ -63,13 +63,13 @@ void Player::Move(Direction direction, Map& map, std::vector<Island>& island)
         map.SetCell(newPos, emptyCell);
 
 
-        if (newPos.x == islandWidth && money >= island.at(0).GetMoneyToNext())
+        if (newPos.x == islandWidth && money >= islands.at(0).GetMoneyToNext())
         {
-            money -= island.at(0).GetMoneyToNext();
+            money -= islands.at(0).GetMoneyToNext();
         }
-        else if (newPos.x == islandWidth * 2 && money >= island.at(1).GetMoneyToNext())
+        else if (newPos.x == islandWidth * 2 && money >= islands.at(1).GetMoneyToNext())
         {
-            money -= island.at(1).GetMoneyToNext();
+            money -= islands.at(1).GetMoneyToNext();
         }
         else 
         {

@@ -1,5 +1,4 @@
 #include "Car.h"
-#include "Map.h"
 #include "Player.h"
 
 Car::Car(const Position& pos) : position(pos), occupied(false) {}

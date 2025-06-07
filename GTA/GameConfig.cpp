@@ -53,8 +53,8 @@ bool GameConfig::LoadFromFile(const std::string& filename)
     pos1 = line.find(';');
     pos2 = line.find(';', pos1 + 1);
     pos3 = line.find(';', pos2 + 1);
-    pedestriansLasVenturas = std::stoi(line.substr(0, pos1));
-    maxMoneySanFierro = std::stoi(line.substr(pos1 + 1, pos2 - pos1 - 1));
+    pedestriansLasVenturas = std::stoi(line.substr(0, pos1)); 
+    maxMoneyLasVenturas = std::stoi(line.substr(pos1 + 1, pos2 - pos1 - 1));
     pedestrianHealthLasVenturas = std::stoi(line.substr(pos2 + 1, pos3 - pos2 - 1));
     pedestrianAttackLasVenturas = std::stoi(line.substr(pos3 + 1));
 

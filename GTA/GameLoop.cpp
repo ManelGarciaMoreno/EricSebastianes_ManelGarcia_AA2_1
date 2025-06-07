@@ -321,7 +321,10 @@ void GameLoop::Render()
                             }
                         }
 
-                        std::cout << map.GetCell(pos).ToChar();
+                        if (!drawn)
+                        {
+                            std::cout << map.GetCell(pos).ToChar();
+                        }
                     }
                 }
             }

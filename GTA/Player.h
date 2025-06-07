@@ -3,11 +3,11 @@
 #define PLAYER_H
 
 #include "Position.h"
-#include "Map.h"
 #include "IslandConfig.h"
+#include "Map.h"
 #include <vector>
 #include <iostream>
-#include "Car.h"
+
 class Car;
 class Pedestrian;
 
@@ -95,5 +95,4 @@ private:
     Direction currentDirection;
     int money = 0;
 };
-
 #endif

@@ -18,6 +18,7 @@ struct GameConfig
 
     int maxMoneyLosSantos = 0;
     int maxMoneySanFierro = 0;
+    int maxMoneyLasVenturas = 0;
 
     int cjHealth = 0;
     int cjAttackPower = 0;
