@@ -42,6 +42,9 @@
     <ClCompile Include="Car.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
+    <ClCompile Include="BigSmoke.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="config.txt">
@@ -74,6 +77,9 @@
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
     <ClInclude Include="Car.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="BigSmoke.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,4 +1,4 @@
-#pragma onceAdd commentMore actions
+#pragma once
 #ifndef CAR_H
 #define CAR_H
 
@@ -18,7 +18,7 @@ public:
 
     bool IsOccupied() const;// { return occupied; }
 
-    void SetOccupied(bool occ);// { occupied = occ; }Add commentMore actions
+    void SetOccupied(bool occ);// { occupied = occ; }
 
     void SetPosition(const Position& pos);// { position = pos; }
 

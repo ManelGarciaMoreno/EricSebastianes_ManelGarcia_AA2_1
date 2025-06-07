@@ -2,6 +2,8 @@
 #include "Pedestrian.h"
 #include "Map.h"
 #include "IslandConfig.h"
+#include "GameLoop.h"
+#include "BigSmoke.h"
 #include <cstdlib>
 #include <iostream>
 
@@ -99,6 +101,12 @@ void Player::Attack(std::vector<Pedestrian>& pedestrians, Map& map, int maxMoney
 
             if (!it->IsAlive())
             {
+                if (it->IsBigSmoke()) 
+                {
+                    GameLoop::ExitGame();
+                    return;
+                }
+
                 Cell moneyCell;
                 moneyCell.type = CellType::MONEY;
                 moneyCell.moneyInCell = it->GetMoney();

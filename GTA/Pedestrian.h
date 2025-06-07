@@ -20,6 +20,9 @@ public:
 
     void TryAttackPlayer(Player& player);
 
+    virtual bool IsBigSmoke() const { return false; }
+    virtual bool CanBeRunOver() const { return true; }
+
     // void AttackPlayer(Player& player);
 
     bool IsAggressive() const 

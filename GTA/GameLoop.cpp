@@ -1,5 +1,6 @@
 #include "GameLoop.h"
 #include "GameConfig.h"
+#include "BigSmoke.h"
 #include <Windows.h>
 #include <Winuser.h>
 #include <iostream>
@@ -10,6 +11,7 @@
 
 bool GameLoop::gameRunning = true;
 bool carFound = false;
+BigSmoke* finalBoss = nullptr;
 
 GameLoop::GameLoop(const GameConfig& config) : map(config.mapWidth, config.mapHeight), player(map, config.cjAttackPower, config.cjHealth)
 {
@@ -333,5 +335,29 @@ void GameLoop::SpawnPedestrians()
                 allPedestrians.push_back(pedestrian);
             }
         }
+    }
+
+    Position pos;
+    int attempts = 0;
+    bool validPosition = false;
+
+    int islandIndex = 2;
+    while (!validPosition && attempts < 100) {
+        pos.x = rand() % (map.GetWidth() / 3) + islandIndex * map.GetWidth() / 3 + 1;
+        pos.y = rand() % (map.GetHeight() - 2) + 1;
+
+        Cell cell = map.GetCell(pos);
+        validPosition = (cell.type != CellType::WALL);
+
+        for (const auto& ped : allPedestrians)
+            if (ped.GetPosition() == pos)
+                validPosition = false;
+
+        attempts++;
+    }
+
+    if (validPosition) {
+        finalBoss = new BigSmoke(pos, 300, 50);
+        allPedestrians.push_back(*finalBoss);
     }
 }
