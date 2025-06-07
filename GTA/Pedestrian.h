@@ -1,11 +1,14 @@
+#pragma once
 #ifndef PEDESTRIAN_H
 #define PEDESTRIAN_H
 
 #include "Position.h"
 #include "Map.h"
 #include "Windows.h"
+#include "Player.h"
+#include "Car.h"
 
-class Player;
+//class Player;
 
 class Pedestrian 
 {
@@ -59,6 +62,9 @@ public:
         health -= damage;
         if (health <= 0) isAlive = false;
     }
+
+    void Kill();
+
 
 private:
     Position position;

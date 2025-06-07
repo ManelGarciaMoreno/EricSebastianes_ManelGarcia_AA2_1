@@ -74,3 +74,8 @@ void Pedestrian::GenerateMoney(int maxAmount)
 {
     money = rand() % maxAmount + 1;
 }
+
+void Pedestrian::Kill()
+{
+    isAlive = false;
+}

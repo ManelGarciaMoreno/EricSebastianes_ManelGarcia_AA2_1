@@ -46,7 +46,7 @@ void Player::Move(Direction direction, Map& map, std::vector<Island>& island)
 
     Cell targetCell = map.GetCell(newPos);
 
-    if (targetCell.type == CellType::MONEY) 
+    if (targetCell.type == CellType::MONEY && !isInCar)
     {
         money += targetCell.moneyInCell;
         Cell emptyCell;

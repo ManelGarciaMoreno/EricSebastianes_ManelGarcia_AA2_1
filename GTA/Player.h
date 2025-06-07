@@ -1,3 +1,4 @@
+#pragma once
 #ifndef PLAYER_H
 #define PLAYER_H
 
@@ -6,7 +7,8 @@
 #include "IslandConfig.h"
 #include <vector>
 #include <iostream>
-
+#include "Car.h"
+class Car;
 class Pedestrian;
 
 class Player
@@ -65,11 +67,28 @@ public:
 
     bool IsInCar() const { return isInCar; }
 
-    void EnterCar() { isInCar = true; }
-
-    void ExitCar() { isInCar = false; }
-
     void SetPosition(const Position& pos) { position = pos; }
+
+    Car* currentCar = nullptr;
+
+    void SetCurrentCar(Car* car) { currentCar = car; }
+
+    Car* GetCurrentCar() const
+    {
+        return currentCar; 
+    }
+
+    void EnterCar(Car* car)
+    {
+        isInCar = true; 
+        currentCar = car; 
+    }
+    void ExitCar()
+    {
+        isInCar = false;
+        currentCar->SetOccupied(false);
+        currentCar = nullptr; 
+    }
 
 private:
     Position position;

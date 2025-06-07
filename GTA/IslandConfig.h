@@ -1,3 +1,4 @@
+#pragma once
 #ifndef ISLAND_H
 #define ISLAND_H
 
@@ -31,7 +32,7 @@ public:
 
     int GetMoneyToNext() const
     {
-        return maxMoney;
+        return moneyToNext;
     }
 
 private:

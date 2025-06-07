@@ -5,6 +5,7 @@
 #include <Winuser.h>
 #include <iostream>
 #include <cstdlib>
+#include "Player.h"
 
 #define VK_E 0x45
 #define VK_E_MIN 0x65
@@ -22,6 +23,7 @@ GameLoop::GameLoop(const GameConfig& config) : map(config.mapWidth, config.mapHe
     islands.emplace_back(config.pedestriansLasVenturas, config.maxMoneySanFierro, 0, config.pedestrianHealthLasVenturas, config.pedestrianAttackLasVenturas);
 
     SpawnPedestrians();
+    SpawnCars();
 }
 
 void GameLoop::ChangeState(int state) { gameState = state; }
@@ -56,10 +58,35 @@ void GameLoop::ProcessInput()
     }
     else if (gameState == 2) 
     {
-        if (GetAsyncKeyState(VK_UP)) player.Move(Player::Direction::UP, map, islands);
-        if (GetAsyncKeyState(VK_DOWN)) player.Move(Player::Direction::DOWN, map, islands);
-        if (GetAsyncKeyState(VK_LEFT)) player.Move(Player::Direction::LEFT, map, islands);
-        if (GetAsyncKeyState(VK_RIGHT)) player.Move(Player::Direction::RIGHT, map, islands);
+        if (GetAsyncKeyState(VK_UP))
+        {
+            if (player.IsInCar() && player.GetCurrentCar() != nullptr)
+                player.GetCurrentCar()->Move(Player::Direction::UP, map);
+            else
+                player.Move(Player::Direction::UP, map, islands);
+        }
+        if (GetAsyncKeyState(VK_DOWN))
+        {
+            if (player.IsInCar() && player.GetCurrentCar() != nullptr)
+                player.GetCurrentCar()->Move(Player::Direction::DOWN, map);
+            else
+                player.Move(Player::Direction::DOWN, map, islands);
+        }
+        if (GetAsyncKeyState(VK_LEFT))
+        {
+            if (player.IsInCar() && player.GetCurrentCar() != nullptr)
+                player.GetCurrentCar()->Move(Player::Direction::LEFT, map);
+            else
+                player.Move(Player::Direction::LEFT, map, islands);
+        }
+
+        if (GetAsyncKeyState(VK_RIGHT))
+        {
+            if (player.IsInCar() && player.GetCurrentCar() != nullptr)
+                player.GetCurrentCar()->Move(Player::Direction::RIGHT, map);
+            else
+                player.Move(Player::Direction::RIGHT, map, islands);
+        }
 
         if (GetAsyncKeyState(VK_SPACE))
         {
@@ -75,13 +102,13 @@ void GameLoop::ProcessInput()
 
         if ((GetAsyncKeyState(VK_E) || GetAsyncKeyState(VK_E_MIN)))
         {
-            if (!player.IsInCar())
+            if(!player.IsInCar())
             {
                 for (auto& car : allCars)
                 {
                     if (car.GetPosition() == player.GetPosition() && !car.IsOccupied())
                     {
-                        player.EnterCar();
+                        player.EnterCar(&car);
                         car.SetOccupied(true);
                         break;
                     }
@@ -89,16 +116,7 @@ void GameLoop::ProcessInput()
             }
             else
             {
-                for (auto& car : allCars)
-                {
-                    if (car.IsOccupied() && car.GetPosition() == player.GetPosition())
-                    {
-                        player.ExitCar();
-                        car.SetOccupied(false);
-                        player.SetPosition(car.GetPosition());
-                        break;
-                    }
-                }
+                player.ExitCar();                
             }
 
             Sleep(150);
@@ -119,6 +137,37 @@ void GameLoop::Update()
         ExitGame();
         return;
     }
+
+    if (player.IsInCar() && player.GetCurrentCar() != nullptr)
+    {
+        player.SetPosition(player.GetCurrentCar()->GetPosition());
+    }
+
+    if (player.IsInCar() && player.GetCurrentCar() != nullptr)
+    {
+        Position carPos = player.GetCurrentCar()->GetPosition();
+
+        for (auto it = allPedestrians.begin(); it != allPedestrians.end(); )
+        {
+            if (it->IsAlive() && it->GetPosition() == carPos)
+            {
+                it->Kill();
+
+                Cell moneyCell;
+                moneyCell.type = CellType::MONEY;
+                moneyCell.moneyInCell = it->GetMoney();
+                map.SetCell(carPos, moneyCell);
+
+                std::cout << "¡Peatón atropellado!\n";
+                it = allPedestrians.erase(it);
+            }
+            else
+            {
+                ++it;
+            }
+        }
+    }
+
 }
 
 void GameLoop::SpawnCars()
