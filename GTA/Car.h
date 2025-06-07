@@ -3,12 +3,10 @@
 #define CAR_H
 
 #include "Position.h"
+#include "Direction.h"
 
 class Map;
-namespace Player { enum class Direction; }
-
-class Map;
-
+class Player;
 class Car
 {
     bool occupied = false;
@@ -16,7 +14,7 @@ class Car
 public:
     Car(const Position& pos);
 
-    void Move(Player::Direction dir, const Map& map);
+    void Move(Direction dir, const Map& map);
 
     bool IsOccupied() const;// { return occupied; }
 

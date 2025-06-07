@@ -4,6 +4,7 @@
 #include "IslandConfig.h"
 #include "GameLoop.h"
 #include "BigSmoke.h"
+#include "Car.h"
 #include <cstdlib>
 #include <iostream>
 
@@ -97,11 +98,16 @@ void Player::Attack(std::vector<Pedestrian>& pedestrians, Map& map, int maxMoney
 
         if (abs(pedPos.x - position.x) + abs(pedPos.y - position.y) == 1)
         {
+            if (it->IsAggressive())
+            {
+                it->SetHasBeenAttacked(true);
+            }
+
             it->TakeDamage(attackPower);
 
             if (!it->IsAlive())
             {
-                if (it->IsBigSmoke()) 
+                if (it->IsBigSmoke())
                 {
                     GameLoop::ExitGame();
                     return;
@@ -116,15 +122,6 @@ void Player::Attack(std::vector<Pedestrian>& pedestrians, Map& map, int maxMoney
                 it = pedestrians.erase(it);
                 shouldIncrement = false;
             }
-            else if (it->IsAggressive())
-            {
-                this->TakeDamage(it->GetAttackPower());
-
-                if (!this->IsAlive())
-                {
-                    return;
-                }
-            }
         }
 
         if (shouldIncrement) {
@@ -133,4 +130,17 @@ void Player::Attack(std::vector<Pedestrian>& pedestrians, Map& map, int maxMoney
     }
 
     pedestrians.insert(pedestrians.end(), newPedestrians.begin(), newPedestrians.end());
+}
+
+
+void Player::EnterCar(Car* car)
+{
+    isInCar = true;
+    currentCar = car;
+}
+void Player::ExitCar()
+{
+    isInCar = false;
+    currentCar->SetOccupied(false);
+    currentCar = nullptr;
 }

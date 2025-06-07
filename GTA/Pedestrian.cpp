@@ -72,7 +72,10 @@ void Pedestrian::Move(const Map& map, const Position& playerPos)
 
 void Pedestrian::GenerateMoney(int maxAmount) 
 {
-    money = rand() % maxAmount + 1;
+    if (maxAmount > 0)
+        money = rand() % maxAmount + 1;
+    else
+        money = 1;
 }
 
 void Pedestrian::Kill()

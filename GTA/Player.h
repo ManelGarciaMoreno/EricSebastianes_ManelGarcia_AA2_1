@@ -3,12 +3,14 @@
 #define PLAYER_H
 
 #include "Position.h"
+#include "Direction.h"
 #include "IslandConfig.h"
 #include "Map.h"
 #include <vector>
 #include <iostream>
 
 class Car;
+class Island;
 class Pedestrian;
 
 class Player
@@ -17,14 +19,7 @@ public:
     int health;
     int attackPower;
     bool isInCar = false;
-
-    enum class Direction
-    {
-        UP,
-        DOWN,
-        LEFT,
-        RIGHT
-    };
+    using Direction = ::Direction;
 
     Player(const Map& map, const int& attack, const int& health);
 
@@ -78,17 +73,8 @@ public:
         return currentCar; 
     }
 
-    void EnterCar(Car* car)
-    {
-        isInCar = true; 
-        currentCar = car; 
-    }
-    void ExitCar()
-    {
-        isInCar = false;
-        currentCar->SetOccupied(false);
-        currentCar = nullptr; 
-    }
+    void EnterCar(Car* car);
+    void ExitCar();
 
 private:
     Position position;

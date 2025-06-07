@@ -6,6 +6,7 @@
 #include <iostream>
 #include <cstdlib>
 #include "Player.h"
+#include "Car.h"
 
 #define VK_E 0x45
 #define VK_E_MIN 0x65
@@ -279,20 +280,19 @@ void GameLoop::Render()
 
                 if (pos == player.GetPosition())
                 {
-                    switch (player.GetDirection())
+                    if (player.IsInCar())
                     {
-                    case Player::Direction::UP:
-                        std::cout << '^';
-                        break;
-                    case Player::Direction::DOWN:
-                        std::cout << 'v';
-                        break;
-                    case Player::Direction::LEFT:
-                        std::cout << '<';
-                        break;
-                    case Player::Direction::RIGHT:
-                        std::cout << '>';
-                        break;
+                        std::cout << 'C';
+                    }
+                    else
+                    {
+                        switch (player.GetDirection())
+                        {
+                        case Player::Direction::UP:    std::cout << '^'; break;
+                        case Player::Direction::DOWN:  std::cout << 'v'; break;
+                        case Player::Direction::LEFT:  std::cout << '<'; break;
+                        case Player::Direction::RIGHT: std::cout << '>'; break;
+                        }
                     }
                 }
                 else

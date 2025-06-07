@@ -1,4 +1,5 @@
 #include "IslandConfig.h"
+//#include "Pedestrian.h"
 
 Island::Island(int maxPedestrians, int maxMoney, int moneyToNext, int pedHealth, int pedAttack) : maxPedestrians(maxPedestrians), maxMoney(maxMoney), moneyToNext(moneyToNext), pedestrianHealth(pedHealth), pedestrianAttack(pedAttack) {}
 

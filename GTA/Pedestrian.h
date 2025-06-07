@@ -28,6 +28,9 @@ public:
 
     // void AttackPlayer(Player& player);
 
+    void SetHasBeenAttacked(bool value) { hasBeenAttacked = value; }
+    bool HasBeenAttacked() const { return hasBeenAttacked; }
+
     bool IsAggressive() const 
     { 
         return isAggressive; 
@@ -75,5 +78,6 @@ private:
     int attackPower;
     bool isAggressive;
     DWORD lastAttackTime = 0;
+    bool hasBeenAttacked = false;
 };
 #endif

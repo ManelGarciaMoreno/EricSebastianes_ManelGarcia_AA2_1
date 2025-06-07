@@ -2,10 +2,11 @@
 #ifndef ISLAND_H
 #define ISLAND_H
 
-#include "Pedestrian.h"
-#include "GameConfig.h"
 #include <vector>
+#include "Pedestrian.h"
 
+class Pedestrian;
+class GameConfig;
 class Island 
 {
 public:

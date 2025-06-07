@@ -145,6 +145,7 @@
     <ClInclude Include="BigSmoke.h" />
     <ClInclude Include="Car.h" />
     <ClInclude Include="Cell.h" />
+    <ClInclude Include="Direction.h" />
     <ClInclude Include="GameConfig.h" />
     <ClInclude Include="GameLoop.h" />
     <ClInclude Include="IslandConfig.h" />
